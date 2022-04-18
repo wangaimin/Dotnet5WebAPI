@@ -1,4 +1,5 @@
 using Dotnet5WebAPI.Models;
+using Dotnet5WebAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,10 +31,16 @@ namespace Dotnet5WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<BookstoreDatabaseSettings>(Configuration.GetSection(nameof(BookstoreDatabaseSettings)));
+
             services.AddSingleton<IBookstoreDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<BookstoreDatabaseSettings>>().Value);
+
+            services.AddSingleton<BookService>();
+
             services.AddControllers();
+
             services.AddDbContext<TodoContext>(opt=>opt.UseInMemoryDatabase("TodoList"));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dotnet5WebAPI", Version = "v1" });
