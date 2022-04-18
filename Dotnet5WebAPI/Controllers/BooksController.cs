@@ -25,6 +25,16 @@ namespace Dotnet5WebAPI.Controllers
             return _bookService.Get();
         }
 
+        [HttpGet]
+        public ActionResult<List<Book>> GetTestAll()
+        {
+            var list = new List<Book>
+            {
+            new Book(){ BookName="MySQL" }
+            };
+            return list;
+        }
+
         [HttpGet("{id:length(24)}", Name = "GetBook")]
         public ActionResult<Book> Get(string id)
         {

@@ -37,7 +37,8 @@ namespace Dotnet5WebAPI
 
             services.AddSingleton<BookService>();
 
-            services.AddControllers();
+            //todo:待验证几种方式
+            services.AddControllers().AddNewtonsoftJson(option=>option.UseMemberCasing());
 
             services.AddDbContext<TodoContext>(opt=>opt.UseInMemoryDatabase("TodoList"));
 
