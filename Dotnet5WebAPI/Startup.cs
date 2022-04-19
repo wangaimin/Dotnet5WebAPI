@@ -29,9 +29,15 @@ namespace Dotnet5WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<BookstoreDatabaseSettings>(Configuration.GetSection(nameof(BookstoreDatabaseSettings)));
-            services.AddSingleton<IBookstoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<BookstoreDatabaseSettings>>().Value);
+            //使用扩展方法注册服务组
+            services.AddConfig(Configuration);
+
+            services.AddTransient<IOperationTransient, Operation>();
+            services.AddScoped<IOperationScoped, Operation>();
+            services.AddSingleton<IOperationSingleton, Operation>();
+
+
+            //扩展方法
             services.AddControllers();
             services.AddDbContext<TodoContext>(opt=>opt.UseInMemoryDatabase("TodoList"));
             services.AddSwaggerGen(c =>
