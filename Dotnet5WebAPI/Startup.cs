@@ -1,6 +1,9 @@
+using Dotnet5WebAPI.Interface;
 using Dotnet5WebAPI.Models;
+using Dotnet5WebAPI.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +39,6 @@ namespace Dotnet5WebAPI
             services.AddScoped<IOperationScoped, Operation>();
             services.AddSingleton<IOperationSingleton, Operation>();
 
-
             //扩展方法
             services.AddControllers();
             services.AddDbContext<TodoContext>(opt=>opt.UseInMemoryDatabase("TodoList"));
@@ -63,9 +65,31 @@ namespace Dotnet5WebAPI
 
             app.UseAuthorization();
 
+            //自定义中间件
+            app.UseMyMiddleware();
+            app.UseMyFirstMiddleware();
+            app.UseMySecondMiddleware();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            //中间件分支
+            app.Map("/api", HandleMapTest1);
+            app.MapWhen(httpContext=>httpContext.Request.Query.ContainsKey("id"),HandleMapTest1);
+
+            app.Run(async context =>
+            {
+                await context.Response.WriteAsync("Hello, World!");
+            });
+        }
+
+        private static void HandleMapTest1(IApplicationBuilder app)
+        {
+            app.Run(async context =>
+            {
+                await context.Response.WriteAsync("Map Test 1");
             });
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Dotnet5WebAPI.Models
+namespace Dotnet5WebAPI.Interface
 {
     public interface IOperation
     {
