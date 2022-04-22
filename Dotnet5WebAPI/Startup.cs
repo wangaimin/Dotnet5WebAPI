@@ -32,12 +32,16 @@ namespace Dotnet5WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             //使用扩展方法注册服务组
             services.AddConfig(Configuration);
 
             services.AddTransient<IOperationTransient, Operation>();
             services.AddScoped<IOperationScoped, Operation>();
             services.AddSingleton<IOperationSingleton, Operation>();
+
+            //读取配置文件
+            services.AddScoped<ConfigService>();
 
             //扩展方法
             services.AddControllers();
@@ -57,6 +61,15 @@ namespace Dotnet5WebAPI
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dotnet5WebAPI v1"));
+            }
+            //可通过launchSettings.json设置、命令行设置、
+            if (env.IsStaging())
+            {
+
+            }
+            if (env.IsProduction())
+            {
+
             }
 
             app.UseHttpsRedirection();
