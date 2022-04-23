@@ -65,7 +65,9 @@ namespace Dotnet5WebAPI
             //可通过launchSettings.json设置、命令行设置、
             if (env.IsStaging())
             {
-
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dotnet5WebAPI v1"));
             }
             if (env.IsProduction())
             {
@@ -88,22 +90,36 @@ namespace Dotnet5WebAPI
                 endpoints.MapControllers();
             });
 
-            //中间件分支
-            app.Map("/api", HandleMapTest1);
-            app.MapWhen(httpContext=>httpContext.Request.Query.ContainsKey("id"),HandleMapTest1);
+            //中间件分支,可选择执行Run直接结束或Use添加中间处理过程
+            //url中含有api就会执行该中间件
+            app.Map("/WeatherForecast", HandleMapRunTest);
+            app.MapWhen(httpContext=>
+            {
+                var isMatch=httpContext.Request.Query.ContainsKey("id");
+                return isMatch;
+             } , HandleMapWhenRunTest);
 
+            //app.Run(async context =>
+            //{
+            //    await context.Response.WriteAsync("Hello, World!");
+            //});
+        }
+
+        private static void HandleMapRunTest(IApplicationBuilder app)
+        {
+            //use还有后续流程可执行
+            //run不会有后续流程，直接返回结果给用户
             app.Run(async context =>
             {
-                await context.Response.WriteAsync("Hello, World!");
+                await context.Response.WriteAsync("Map Test ");
             });
         }
 
-        private static void HandleMapTest1(IApplicationBuilder app)
+        private static void HandleMapWhenRunTest(IApplicationBuilder app)
         {
-            app.Run(async context =>
-            {
-                await context.Response.WriteAsync("Map Test 1");
-            });
+            //use还有后续流程可执行
+            //run不会有后续流程，直接返回结果给用户
+            app.UseMiddleware<MapWhenMiddleware>();
         }
     }
 }

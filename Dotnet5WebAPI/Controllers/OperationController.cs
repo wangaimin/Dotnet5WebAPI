@@ -18,7 +18,6 @@ namespace Dotnet5WebAPI.Controllers
         private readonly IOperationTransient _operationTransient;
         private readonly IOperationScoped _operationScoped;
         private readonly IOperationSingleton _operationSingleton;
-        private readonly OperationService _operationService;
        // private readonly ILogger _logger;
         public OperationController(
                             IOperationTransient operationTransient,
