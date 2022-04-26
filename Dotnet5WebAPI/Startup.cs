@@ -2,6 +2,7 @@ using Dotnet5WebAPI.Interface;
 using Dotnet5WebAPI.Models;
 using Dotnet5WebAPI.Service;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -45,17 +46,26 @@ namespace Dotnet5WebAPI
 
             //扩展方法
             services.AddControllers();
-            services.AddDbContext<TodoContext>(opt=>opt.UseInMemoryDatabase("TodoList"));
+            services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dotnet5WebAPI", Version = "v1" });
             });
 
+            //可指定多个名称
+            services.AddHttpClient("httpTestClient");
+            services.AddHttpClient("MultipleParameter", httpClient =>
+            {
+                httpClient.BaseAddress=new Uri("http://portal.jc.yzw.cn.qa:8003");
+                httpClient.DefaultRequestHeaders.Add("myHeader", "test");
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            logger.LogWarning(env.EnvironmentName);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -73,6 +83,18 @@ namespace Dotnet5WebAPI
             {
 
             }
+
+            //使用中间件处理系统异常，不推荐在此处处理，推荐在继承IExceptionFilter中处理
+            app.UseExceptionHandler(configure =>
+            {
+                //configure.Run(async context =>
+                //{
+                //    var exceptionHandlerPathFeature =
+                //       context.Features.Get<IExceptionHandlerPathFeature>();
+                //    await context.Response.WriteAsync("UseExceptionHandler");
+                //});
+            }
+            );
 
             app.UseHttpsRedirection();
 
@@ -93,11 +115,11 @@ namespace Dotnet5WebAPI
             //中间件分支,可选择执行Run直接结束或Use添加中间处理过程
             //url中含有api就会执行该中间件
             app.Map("/WeatherForecast", HandleMapRunTest);
-            app.MapWhen(httpContext=>
+            app.MapWhen(httpContext =>
             {
-                var isMatch=httpContext.Request.Query.ContainsKey("id");
+                var isMatch = httpContext.Request.Query.ContainsKey("id");
                 return isMatch;
-             } , HandleMapWhenRunTest);
+            }, HandleMapWhenRunTest);
 
             //app.Run(async context =>
             //{
