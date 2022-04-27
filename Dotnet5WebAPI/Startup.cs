@@ -1,3 +1,4 @@
+using Dotnet5WebAPI.Common;
 using Dotnet5WebAPI.Interface;
 using Dotnet5WebAPI.Models;
 using Dotnet5WebAPI.Service;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,8 +46,11 @@ namespace Dotnet5WebAPI
             //读取配置文件
             services.AddScoped<ConfigService>();
 
-            //扩展方法
-            services.AddControllers();
+            //扩展方法,使用异常过滤器后不会用到中间件中异常处理
+            services.AddControllers(config=> {
+                config.Filters.Add(new MyExceptionFilter());
+            
+            });
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddSwaggerGen(c =>
             {
@@ -56,7 +61,7 @@ namespace Dotnet5WebAPI
             services.AddHttpClient("httpTestClient");
             services.AddHttpClient("MultipleParameter", httpClient =>
             {
-                httpClient.BaseAddress=new Uri("http://portal.jc.yzw.cn.qa:8003");
+                httpClient.BaseAddress = new Uri("http://portal.jc.yzw.cn.qa:8003");
                 httpClient.DefaultRequestHeaders.Add("myHeader", "test");
             });
 
@@ -84,17 +89,28 @@ namespace Dotnet5WebAPI
 
             }
 
+            #region 异常处理
             //使用中间件处理系统异常，不推荐在此处处理，推荐在继承IExceptionFilter中处理
-            app.UseExceptionHandler(configure =>
-            {
-                //configure.Run(async context =>
-                //{
-                //    var exceptionHandlerPathFeature =
-                //       context.Features.Get<IExceptionHandlerPathFeature>();
-                //    await context.Response.WriteAsync("UseExceptionHandler");
-                //});
-            }
-            );
+            //1.
+            //app.UseExceptionHandler(configure =>
+            //{
+            //    //此处返回Json
+            //    configure.Run(async context =>
+            //    {
+            //        var exceptionHandlerPathFeature =
+            //           context.Features.Get<IExceptionHandlerPathFeature>();
+            //        var content = new { exceptionHandlerPathFeature.Error.Message, Code = "500" };
+            //        context.Response.ContentType = "application/json";
+            //        context.Response.StatusCode = 500;
+            //        await context.Response.WriteAsync(JsonConvert.SerializeObject(content));
+            //    });
+            //});
+            //2.
+            app.UseExceptionHandler("/error");
+            #endregion
+
+
+
 
             app.UseHttpsRedirection();
 
