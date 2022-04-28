@@ -1,5 +1,7 @@
 using Dotnet5WebAPI.Common;
+using Dotnet5WebAPI.DA;
 using Dotnet5WebAPI.Interface;
+using Dotnet5WebAPI.Microsoft.EntityFrameworkCore;
 using Dotnet5WebAPI.Models;
 using Dotnet5WebAPI.Service;
 using Microsoft.AspNetCore.Builder;
@@ -51,7 +53,16 @@ namespace Dotnet5WebAPI
                 config.Filters.Add(new MyExceptionFilter());
             
             });
+
+
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+            services.AddDbContext<AuthCenterContext>(options=>
+            {
+                options.UseSqlServer(Configuration["AuthConnectionStrings:AuthContext"]);
+            });
+            services.AddSingleton<ISystemUserRepository, SystemUserRepository>();
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dotnet5WebAPI", Version = "v1" });
