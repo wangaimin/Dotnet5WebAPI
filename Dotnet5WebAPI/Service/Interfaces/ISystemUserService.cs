@@ -8,6 +8,6 @@ namespace Dotnet5WebAPI.Service
 {
     public interface ISystemUserService
     {
-        SystemUser Get(int sysno);
+         Task<SystemUser> Get(int sysno);
     }
 }

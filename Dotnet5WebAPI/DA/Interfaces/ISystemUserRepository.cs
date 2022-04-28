@@ -8,6 +8,6 @@ namespace Dotnet5WebAPI.DA
 {
     public interface ISystemUserRepository
     {
-        SystemUser Get(int sysno);
+        Task<SystemUser> Get(int sysno);
     }
 }

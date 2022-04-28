@@ -60,8 +60,8 @@ namespace Dotnet5WebAPI
             {
                 options.UseSqlServer(Configuration["AuthConnectionStrings:AuthContext"]);
             });
-            services.AddSingleton<ISystemUserRepository, SystemUserRepository>();
-
+            services.AddScoped<ISystemUserRepository, SystemUserRepository>();
+            services.AddScoped<ISystemUserService, SystemUserService>();
 
             services.AddSwaggerGen(c =>
             {

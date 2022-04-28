@@ -15,9 +15,9 @@ namespace Dotnet5WebAPI.DA
             _authCenterContext = authCenterContext;
         }
 
-        public SystemUser Get(int sysno)
+        public async Task<SystemUser> Get(int sysno)
         {
-            var user=_authCenterContext.SystemUsers.Find(sysno);
+            var user=await _authCenterContext.SystemUsers.FindAsync(sysno);
             return user;
         }
     }

@@ -16,9 +16,10 @@ namespace Dotnet5WebAPI.Service
             _systemUserRepository = systemUserRepository;
         }
 
-        public SystemUser Get(int sysno)
+        public async Task<SystemUser> Get(int sysno)
         {
-            return _systemUserRepository.Get(sysno);
+            return await _systemUserRepository.Get(sysno);
         }
+
     }
 }
