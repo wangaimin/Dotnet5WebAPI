@@ -45,7 +45,11 @@ namespace Dotnet5WebAPI
             services.AddScoped<ConfigService>();
 
             //扩展方法
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options=>
+            { 
+                //设置输出json格式
+               // options.SerializerSettings.ContractResolver= new DefaultContractResolver();
+            });
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddSwaggerGen(c =>
             {
@@ -71,6 +75,7 @@ namespace Dotnet5WebAPI
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dotnet5WebAPI v1"));
+
             }
             //可通过launchSettings.json设置、命令行设置、
             if (env.IsStaging())
