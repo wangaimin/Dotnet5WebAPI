@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Dotnet5WebAPI.Models
 {
+    //todo The entity type 'SystemUser' requires a primary key to be defined. If you intended to use a keyless entity type, call 'HasNoKey' in 'OnModelCreating'. For more information on keyless entity types, see https://go.microsoft.com/fwlink/?linkid=2141943.
     public class SystemUser
     {
+        public int SysNo { get; set; }
+
         /// <summary>
         /// 用于判断用户cookie的随机码
         /// </summary>
         public string RandomCode { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public int SysNo { get; set; }
-
 
         /// <summary>
         /// 要求全局唯一
         /// </summary>
         public string LoginName { get; set; }
-
 
         /// <summary>
         /// 
@@ -77,13 +75,6 @@ namespace Dotnet5WebAPI.Models
         public string OrganizationCode { get; set; }
 
         /// <summary>
-        /// 用户默认组织机构编码
-        /// </summary>
-        public string OrganizationName { get; set; }
-
-        public string RoleName { get; set; }
-
-        /// <summary>
         /// 区分使用哪个系统
         /// </summary>
         public int SystemUserType { get; set; }
@@ -112,36 +103,11 @@ namespace Dotnet5WebAPI.Models
         /// </summary>
         public string CountryCode { get; set; }
 
-        public string NewLoginPassword { get; set; }
-
-        public int? SupplierParentSysNo { get; set; }
 
         /// <summary>
         /// 最近一次登录时间
         /// </summary>
         public DateTime? LastLoginTime { get; set; }
-
-
-        /// <summary>
-        /// 是否是已验证用户
-        /// </summary>
-        public bool? IsVerifyPhoneUser { get; set; }
-
-
-        /// <summary>
-        /// 是否启用接收短信  
-        /// </summary>
-        public bool? EnableSubscribe { get; set; }
-
-        /// <summary>
-        /// 申请证书绑定状态
-        /// </summary>
-        public bool BindStatus { get; set; }
-
-        /// <summary>
-        /// 证书系统编号
-        /// </summary>
-        public int CertificateSysNo { get; set; }
 
         public string DingTalkDepartmentName { get; set; }
 

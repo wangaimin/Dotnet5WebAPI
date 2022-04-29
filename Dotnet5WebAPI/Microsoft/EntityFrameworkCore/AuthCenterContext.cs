@@ -19,7 +19,7 @@ namespace Dotnet5WebAPI.Microsoft.EntityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SystemUser>().ToTable("SystemUser");
+            modelBuilder.Entity<SystemUser>().ToTable("SystemUser").HasKey("SysNo");
         }
     }
 }

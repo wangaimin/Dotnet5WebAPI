@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Dotnet5WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[systemuser]")]
     [ApiController]
     public class SystemUserController : ControllerBase
     {
