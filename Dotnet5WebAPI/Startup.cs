@@ -52,8 +52,11 @@ namespace Dotnet5WebAPI
             services.AddControllers(config=> {
                 config.Filters.Add(new MyExceptionFilter());
             
-            });
-
+            }).AddNewtonsoftJson(options =>
+            {
+                //设置输出json格式
+                // options.SerializerSettings.ContractResolver= new DefaultContractResolver();
+            }); 
 
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddDbContext<AuthCenterContext>(options=>

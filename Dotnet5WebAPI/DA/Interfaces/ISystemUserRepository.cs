@@ -9,5 +9,7 @@ namespace Dotnet5WebAPI.DA
     public interface ISystemUserRepository
     {
         Task<SystemUser> Get(int sysno);
+
+        Task<int> Insert(SystemUser systemUser);
     }
 }

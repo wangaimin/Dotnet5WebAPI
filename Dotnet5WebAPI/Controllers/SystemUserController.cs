@@ -24,5 +24,11 @@ namespace Dotnet5WebAPI.Controllers
         {
               return await _systemUserService.Get(sysno);
         }
+
+        [HttpPut]
+        public async Task<int> Put(SystemUser systemUser)
+        {
+            return await _systemUserService.Insert(systemUser);
+        }
     }
 }

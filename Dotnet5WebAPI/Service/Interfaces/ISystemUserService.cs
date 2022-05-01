@@ -9,5 +9,7 @@ namespace Dotnet5WebAPI.Service
     public interface ISystemUserService
     {
          Task<SystemUser> Get(int sysno);
+
+         Task<int> Insert(SystemUser systemUser);
     }
 }

@@ -21,5 +21,11 @@ namespace Dotnet5WebAPI.Service
             return await _systemUserRepository.Get(sysno);
         }
 
+        public async Task<int> Insert(SystemUser systemUser)
+        {
+            await _systemUserRepository.Insert(systemUser);
+            return systemUser.SysNo;
+        }
+
     }
 }
