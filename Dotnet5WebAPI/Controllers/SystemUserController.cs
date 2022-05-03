@@ -20,15 +20,24 @@ namespace Dotnet5WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("Get")]
         public async Task<SystemUser> Get(int sysno)
         {
               return await _systemUserService.Get(sysno);
         }
 
         [HttpPut]
+        [Route("Put")]
         public async Task<int> Put(SystemUser systemUser)
         {
             return await _systemUserService.Insert(systemUser);
+        }
+
+        [HttpPost]
+        [Route("Post")]
+        public async Task<SystemUser> Post(SystemUser systemUser)
+        {
+            return await _systemUserService.Update(systemUser);
         }
     }
 }

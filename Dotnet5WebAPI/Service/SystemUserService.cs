@@ -27,5 +27,10 @@ namespace Dotnet5WebAPI.Service
             return systemUser.SysNo;
         }
 
+        public async Task<SystemUser> Update(SystemUser systemUser)
+        {
+            var result=await _systemUserRepository.Update(systemUser);
+            return result;
+        }
     }
 }

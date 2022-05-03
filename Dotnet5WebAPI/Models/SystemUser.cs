@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ namespace Dotnet5WebAPI.Models
         /// <summary>
         /// 要求全局唯一
         /// </summary>
+        [Required(ErrorMessage ="登录名不能为空")]
+        [StringLength(5)]
         public string LoginName { get; set; }
 
         /// <summary>
@@ -110,6 +113,8 @@ namespace Dotnet5WebAPI.Models
         public DateTime? LastLoginTime { get; set; }
 
         public string DingTalkDepartmentName { get; set; }
+
+        public int Gender { get; set; }
 
     }
 

@@ -11,5 +11,7 @@ namespace Dotnet5WebAPI.Service
          Task<SystemUser> Get(int sysno);
 
          Task<int> Insert(SystemUser systemUser);
+
+        Task<SystemUser> Update(SystemUser systemUser);
     }
 }

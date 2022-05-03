@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dotnet5WebAPI.DA
 {
-    public class SystemUserRepository: ISystemUserRepository
+    public class SystemUserRepository : ISystemUserRepository
     {
         AuthCenterContext _authCenterContext;
         public SystemUserRepository(AuthCenterContext authCenterContext)
@@ -17,7 +17,7 @@ namespace Dotnet5WebAPI.DA
 
         public async Task<SystemUser> Get(int sysno)
         {
-            var user=await _authCenterContext.SystemUsers.FindAsync(sysno);
+            var user = await _authCenterContext.SystemUsers.FindAsync(sysno);
             return user;
         }
 
@@ -26,6 +26,13 @@ namespace Dotnet5WebAPI.DA
             _authCenterContext.Add(systemUser);
             await _authCenterContext.SaveChangesAsync();
             return systemUser.SysNo;
+        }
+
+        public async Task<SystemUser> Update(SystemUser systemUser)
+        {
+            var result=_authCenterContext.Update(systemUser).Entity;
+            await _authCenterContext.SaveChangesAsync();
+            return result;
         }
     }
 }

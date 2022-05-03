@@ -106,19 +106,19 @@ namespace Dotnet5WebAPI
             #region 异常处理
             //使用中间件处理系统异常，不推荐在此处处理，推荐在继承IExceptionFilter中处理
             //1.
-            //app.UseExceptionHandler(configure =>
-            //{
-            //    //此处返回Json
-            //    configure.Run(async context =>
-            //    {
-            //        var exceptionHandlerPathFeature =
-            //           context.Features.Get<IExceptionHandlerPathFeature>();
-            //        var content = new { exceptionHandlerPathFeature.Error.Message, Code = "500" };
-            //        context.Response.ContentType = "application/json";
-            //        context.Response.StatusCode = 500;
-            //        await context.Response.WriteAsync(JsonConvert.SerializeObject(content));
-            //    });
-            //});
+            app.UseExceptionHandler(configure =>
+            {
+                //此处返回Json
+                configure.Run(async context =>
+                {
+                    var exceptionHandlerPathFeature =
+                       context.Features.Get<IExceptionHandlerPathFeature>();
+                    var content = new { exceptionHandlerPathFeature.Error.Message, Code = "500" };
+                    context.Response.ContentType = "application/json";
+                    context.Response.StatusCode = 500;
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(content));
+                });
+            });
             //2.
             app.UseExceptionHandler("/error");
             #endregion
