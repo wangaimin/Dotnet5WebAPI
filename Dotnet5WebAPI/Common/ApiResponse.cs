@@ -9,7 +9,7 @@ namespace Dotnet5WebAPI.Common
     /// 默认的API返回包装格式体
     /// </summary>
     [Serializable]
-    public class ApiResponse 
+    public class ApiResponse : IResultDataWrapper
     {
         /// <summary>
         /// 是否成功

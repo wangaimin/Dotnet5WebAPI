@@ -50,8 +50,9 @@ namespace Dotnet5WebAPI
 
             //扩展方法,使用异常过滤器后不会用到中间件中异常处理
             services.AddControllers(config=> {
-                config.Filters.Add(new MyExceptionFilter());
-            
+                config.Filters.Add(typeof(MyExceptionFilter));
+                //封装处理结果，Entity上的字段非空校验属于非异常，只能在此处包装
+                config.Filters.Add(typeof(DataWrapperFilter));
             }).AddNewtonsoftJson(options =>
             {
                 //设置输出json格式
@@ -106,19 +107,19 @@ namespace Dotnet5WebAPI
             #region 异常处理
             //使用中间件处理系统异常，不推荐在此处处理，推荐在继承IExceptionFilter中处理
             //1.
-            app.UseExceptionHandler(configure =>
-            {
-                //此处返回Json
-                configure.Run(async context =>
-                {
-                    var exceptionHandlerPathFeature =
-                       context.Features.Get<IExceptionHandlerPathFeature>();
-                    var content = new { exceptionHandlerPathFeature.Error.Message, Code = "500" };
-                    context.Response.ContentType = "application/json";
-                    context.Response.StatusCode = 500;
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(content));
-                });
-            });
+            //app.UseExceptionHandler(configure =>
+            //{
+            //    //此处返回Json
+            //    configure.Run(async context =>
+            //    {
+            //        var exceptionHandlerPathFeature =
+            //           context.Features.Get<IExceptionHandlerPathFeature>();
+            //        var content = new { exceptionHandlerPathFeature.Error.Message, Code = "500" };
+            //        context.Response.ContentType = "application/json";
+            //        context.Response.StatusCode = 500;
+            //        await context.Response.WriteAsync(JsonConvert.SerializeObject(content));
+            //    });
+            //});
             //2.
             app.UseExceptionHandler("/error");
             #endregion
